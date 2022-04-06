@@ -1,6 +1,6 @@
 # YelpCamp
 The famous YelpCamp project with a few add-ons.
-This is my version of the YelpCamp project.
+This is my version of the YelpCamp project.\n
 Features - 
   - Fuzzy Search
   - Pagination
