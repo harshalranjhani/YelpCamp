@@ -1,0 +1,51 @@
+<% layout('layouts/boilerplate') %>
+    <style>
+        @media screen and (max-width:1000px) {
+            #notfound{
+                width: 300px;
+                height: 300px;
+            }
+            #nf-text{
+                display: none;
+            }
+        }
+        @media screen and (min-width:1000px) {
+            #mobile-header{
+                display: none;
+            }
+        }
+    </style>
+    <% if(err.statusCode!==404) {%>
+        <div class="row">
+            <div class="col-6 offset-3">
+                <div class="alert alert-danger" role="alert">
+                    <h4 class="alert-heading">
+                        <%=err.message%>
+                    </h4>
+                    <!-- <!-- <p>Looks like you encountered an Error!</p> -->
+            <hr>
+            <!-- <a href="/campgrounds" class="btn btn-secondary">Go Back?</a> --> -->
+                    <% if(process.env.NODE_ENV !=='production' ){ %>
+                        <p>
+                            <%=err.stack%>
+                        </p>
+                        <% } %>
+                </div>
+            </div>
+        </div>
+        <% } else { %>
+            <h1 class="display-5" id="mobile-header">Page Not Found!</h1>
+            <div class="row">
+                <div class="col-6">
+                    <div class="d-flex justify-content-md-center align-items-center">
+                        <img id="notfound" src="imgs/undraw_page_not_found_re_e9o6.svg" class="mb-3"
+                            alt="No Results Matched">
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div id="nf-text" class="display-5 mt-5">
+                        Page Not Found!
+                    </div>
+                </div>
+            </div>
+            <% } %>

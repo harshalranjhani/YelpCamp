@@ -1,0 +1,103 @@
+<% layout('layouts/boilerplate')%>
+<!-- Button trigger modal -->
+
+  
+  <!-- Modal -->
+  <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="staticBackdropLabel">YelpStar</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          Create 3 or more Campgrounds to become a YelpStar!
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <a href="/campgrounds/new" type="button" class="btn btn-success">Create Now</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+    <h1 class="col-md-8">
+        <h1>
+            <%= user.firstName.charAt(0).toUpperCase() + user.firstName.slice(1) %>
+                <%=user.lastName.charAt(0).toUpperCase() + user.lastName.slice(1) %>
+        </h1>
+        <% if(campgrounds.length>= 3) {%>
+            <button style="background: none; border: none;" type="button" class="" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+                <span class="d-inline badge rounded-pill bg-success">YelpStar</span>
+              </button>
+            <% } %>
+        
+        <h2>Email : <%= user.email %></h2>
+        <h3>username: <%= user.username %> </h3>
+              <% if(campgrounds.length) {%> 
+            <% for(let campground of campgrounds) { %>
+                <div class="card mb-3">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <%if(campground.images.length) {%>
+                                <img class="img-fluid" alt="Campground Image"
+                                    src="<%=campground.images[0].url%>">
+                                <% }else {%>
+                                    <img class="img-fluid" alt=""
+                                        src="https://res.cloudinary.com/douqbebwk/image/upload/v1600103881/YelpCamp/lz8jjv2gyynjil7lswf4.png">
+                                    <% } %>
+                        </div>
+                        <div class="col-md-8">
+                            <div class="card-body">
+                                <h5 class="card-title">
+                                    <%=campground.title%>
+                                </h5>
+                                <p class="card-text">
+                                    <%=campground.description%>
+                                </p>
+                                <p class="card-text">
+                                    <small class="text-muted">
+                                        <%=campground.location%>
+                                    </small>
+                                </p>
+                                <a href='/campgrounds/<%=campground._id%> ' class="btn btn-primary">View
+                                    <%=campground.title%>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            <% } %>
+            <% if(!(campgrounds.length < 10)) {%> 
+            <nav aria-label="page navigation">
+                <% if (pages && pages > 0) { %>
+                <ul class="pagination justify-content-center">
+                    <% if (current == 1) { %>
+                    <li class="page-item disabled"><a class="page-link">First</a></li>
+                    <% } else { %>
+                    <li><a class="page-link" href="/dashboard/<%= user._id %> <%if(search){%>?search=<%=search%><%}%>">First</a></li>
+                    <% } %>
+            
+                    <% let i = (Number(current) > 3 ? Number(current) - 2 : 1) %>
+   
+                    <% for (; i <= (Number(current) + 2) && i <= pages; i++) { %>
+                    <% if (i == current) { %>
+                    <li class="active"><a class="page-link"><%= i %></a></li>
+                    <% } else { %>
+                    <li><a class="page-link" href="/dashboard/<%=user._id%>?page=<%= i %><%if(search){%>&search=<%=search%><%}%>"><%= i %></a></li>
+                    <% } %>
+                    <% } %>
+            
+            
+                    <% if (current == pages) { %>
+                    <li class="page-item disabled"><a class="page-link">Last</a></li>
+                    <% } else { %>
+                    <li><a class="page-link" href="/dashboard/<%=user._id%>?page=<%= pages %><%if(search){%>&search=<%=search%><%}%>">Last</a></li>
+                    <% } %>
+                </ul>
+                <% } %>
+            </nav>
+            <% } %> 
+            <% } else{ %> 
+                <h4 class="display-4 m-5 text-center">No Campgrounds Added</h4>
+                <% } %> 
