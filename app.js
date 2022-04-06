@@ -128,13 +128,14 @@ app.use(
             scriptSrc: ["'unsafe-inline'", "'self'", ...scriptSrcUrls],
             styleSrc: ["'self'", "'unsafe-inline'", ...styleSrcUrls],
             workerSrc: ["'self'", "blob:"],
+            childSrc: ["blob:"],
             objectSrc: [],
             imgSrc: [
                 "'self'",
                 "blob:",
                 "data:",
-                "https://res.cloudinary.com/ddeu2euos/", //SHOULD MATCH YOUR CLOUDINARY ACCOUNT! 
-                "https://images.unsplash.com/",
+                `https://res.cloudinary.com/${process.env.CLOUDINARY_CLOUD_NAME}`,
+                "https://images.unsplash.com",
             ],
             fontSrc: ["'self'", ...fontSrcUrls],
         },
