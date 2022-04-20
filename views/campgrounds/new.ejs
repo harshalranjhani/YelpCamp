@@ -1,7 +1,25 @@
 <% layout('layouts/boilerplate') %>
+<style>
+    @media screen and (max-width:1000px) {
+        .all-btn{
+            margin-left: 10% !important;
+            margin-right: 10px !important;
+            width: 90%;
+        }
+
+        .col-6{
+            width: 70%;
+            margin-left: 10%;
+        }
+
+        .add-btn{
+           margin-left: 22%;
+        }
+    }
+</style>
     <div class="row">
         <h1 class="text-center">New Campground</h1>
-        <div class="col-6 offset-3">
+        <div class="col-6 offset-lg-3">
             <form action="/campgrounds" method="post" novalidate class="validated-form" enctype="multipart/form-data">
                 <div class="mb-3">
                     <label class="form-label" for="title">Title</label>
@@ -50,11 +68,11 @@
                     </div>
                 </div>
                     <div>
-                        <button class="btn btn-success">Add Campground</button>
+                        <button class="btn btn-success add-btn">Add Campground</button>
                     
             </form>
             
-                <a class="btn btn-secondary d-inline-block mb-3 mx-3 mt-3" href="/campgrounds">All Campgrounds</a>
+                <a class="btn btn-secondary d-inline-block mb-3 mx-3 mt-3 all-btn" href="/campgrounds">All Campgrounds</a>
             </div>
     </div>
     </div>
