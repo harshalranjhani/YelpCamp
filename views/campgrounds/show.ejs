@@ -60,6 +60,12 @@
         </div>
         <div id="rightDiv" class="col-6 mt-3">
             <div id="map"></div>
+            <% if(!currentUser) { %> 
+                <div class="alert alert-info alert-dismissible fade show my-3" role="alert">
+                    <a href="/login"><strong>Log In</strong></a> to add new Reviews and create awesome campgrounds to help others!
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                  </div>
+                <% }%>
             <% if(currentUser) { %>
                 <h2 class="mt-3">Leave a Review</h2>
                 <form action="/campgrounds/<%=campground._id%>/reviews" method="POST" class="mb-3 validated-form"
@@ -96,8 +102,11 @@
                     <button class="btn btn-success submit-button">Submit</button>
                 </form>
                 <% } %>
+                <% if(campground.reviews.length===0) { %> 
+                    <h2 class="display-6 text-center">No Reviews added so far!</h2>
+                    <% } %> 
                     <% for(let review of campground.reviews) { %>
-                        <div class="card mb-3 ">
+                        <div class="card mb-3 mt-3">
                             <div class="card-body">
                                 <!-- <h5 class="card-title">Rating: <%= review.rating %>
                                 </h5> -->
