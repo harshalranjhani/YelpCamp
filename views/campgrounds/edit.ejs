@@ -1,4 +1,26 @@
 <% layout('layouts/boilerplate') %>
+<style>
+    @media screen and (max-width:1000px) {
+        .col-6{
+            width: 70%;
+            margin-left: 10%;
+        }
+
+        .update-button{
+            margin: 20px;
+            margin-left: 41px;
+        }
+
+        .del-button{
+            margin-left: 40px;
+        }
+
+        .main-btn{
+            margin: 10%;
+            margin-left: 45px;
+        }
+    }
+</style>
     <div class="row">
         <h1 class="text-center">Edit Campground</h1>
         <div class="col-6 offset-3">
@@ -51,7 +73,7 @@
                     </div>
                 </div>
                 <div class="mb-3">
-                    <h5> Delete Images </h5>
+                    <h5> Delete Existing Images </h5>
                     <div class="row row-cols-1 row-cols-md-4 g-4 mb-3">
                         <% campground.images.forEach((image, i)=> { %>
                             <div class="col">
@@ -68,14 +90,14 @@
                     </div>
                 </div>
                 <div class="mb-3">
-                    <button class="btn btn-info">Update Campground</button>
+                    <button class="btn btn-info update-button">Update Campground</button>
             </form>
             <form action="/campgrounds/<%=campground._id%>?_method=DELETE" method="POST" class="d-inline-block">
-                <button class="btn btn-danger d-inline">Delete Campground</button>
+                <button class="btn btn-danger d-inline del-button">Delete Campground</button>
             </form>
         </div>
         <div class="mb-3">
-            <a class="btn btn-secondary" href="/campgrounds/<%=campground._id%> ">Back to Campground</a>
+            <a class="btn btn-secondary main-btn" href="/campgrounds/<%=campground._id%> ">Back to Campground</a>
         </div>
     </div>
     </div>
