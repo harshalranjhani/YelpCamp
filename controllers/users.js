@@ -10,8 +10,45 @@ let mailTransporter = nodemailer.createTransport({
   },
 });
 
-const message =
-  '<h1>Thanks for creating an account on <a href="experience-yelpcamp.herokuapp.com">Yelpcamp</a></h1>';
+const message = `<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=League+Spartan:wght@700&display=swap');
+        body{
+            background-color: aliceblue;
+            font-family: 'League Spartan', sans-serif;
+        }
+        button{
+            border-radius: 5px;
+            background-color: black;
+            color: white;
+            padding: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container" style="width:500px ;height:500px;">
+    <div style="display: block; margin:0 200px;">
+        <img style="height: 2rem;" src="https://freepngimg.com/save/26767-welcome-picture/749x217" alt="YELPCAMP">
+    </div>
+    <div>
+        <h1 style="text-align: center;">Welcome to YelpCamp, Hiker!</h1>
+        <p style="text-align: center;">We are delighted to have you here.</p>
+    </div>
+    <div style=" display: block; margin:0 170px; width: 300px; cursor: pointer;">
+    <a href="https://experience-yelpcamp.herokuapp.com/campgrounds/new"><button  style="cursor:pointer;">Add New Campground</button></a>
+</div>
+<div>
+    <p style="text-align: center;">&copy; YelpCamp | 2022</p>
+</div>
+</div>
+</body>
+</html>`;
 
 module.exports.renderRegisterForm = (req, res) => {
   res.render("users/register");
@@ -26,7 +63,7 @@ module.exports.registerUser = async (req, res, next) => {
     let mailDetails = {
       from: "yelpcamp.alerts@gmail.com",
       to: email,
-      subject: "Test mail",
+      subject: "Welcome to YelpCamp!",
       html: message,
     };
 
