@@ -5,7 +5,6 @@ const mapBoxToken = process.env.MAPBOX_TOKEN;
 const geocoder = mbxGeocoding({ accessToken: mapBoxToken });
 const { cloudinary } = require("../cloudinary");
 const moment = require("moment");
-const date = moment().format();
 
 function escapeRegex(text) {
   return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
@@ -94,11 +93,13 @@ module.exports.showCampground = async (req, res) => {
       },
     })
     .populate("author");
+
   if (!campground) {
     req.flash("error", "Cannot find that campground");
     res.redirect("/campgrounds");
   }
-  res.render("campgrounds/show", { campground });
+  const postedOn = moment(campground.postedOn).fromNow();
+  res.render("campgrounds/show", { campground, postedOn });
 };
 
 module.exports.renderEditForm = async (req, res) => {
