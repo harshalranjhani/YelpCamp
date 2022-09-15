@@ -54,8 +54,10 @@ module.exports.renderNewForm = (req, res) => {
 };
 
 module.exports.createCampground = async (req, res) => {
-  // if (!req.body.campground) throw new ExpressError('Invalid Campground Data', 400);
+  if (!req.body.campground)
+    throw new ExpressError("Invalid Campground Data", 400);
   try {
+    const date = new Date();
     const geoData = await geocoder
       .forwardGeocode({
         query: req.body.campground.location,
@@ -70,12 +72,13 @@ module.exports.createCampground = async (req, res) => {
       url: f.path.replace("/upload", "/upload/w_1920,h_1080,c_fill"),
       filename: f.filename,
     }));
-    console.log(date);
+    // console.log(date);
     await campground.save();
     // console.log(campground);
     req.flash("success", "Successfully made a new Campground!");
     res.redirect(`/campgrounds/${campground._id}`);
   } catch (e) {
+    console.log(e);
     req.flash(
       "error",
       `Either the location was not found or the campground wasn't saved. Please try again.`
@@ -109,7 +112,18 @@ module.exports.renderEditForm = async (req, res) => {
     req.flash("error", "Cannot find that campground");
     res.redirect("/campgrounds");
   }
-  res.render("campgrounds/edit", { campground });
+  const hasCorrectImages = false;
+  console.log(campground);
+  campground.images.forEach((image) => {
+    if (
+      image.url.endsWith(".png") ||
+      image.url.endsWith(".jpg") ||
+      image.url.endsWith(".jpeg")
+    ) {
+      hasCorrectImages = true;
+    }
+  });
+  res.render("campgrounds/edit", { campground, hasCorrectImages });
 };
 
 module.exports.updateCampground = async (req, res) => {
