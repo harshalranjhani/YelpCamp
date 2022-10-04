@@ -112,16 +112,17 @@ module.exports.renderEditForm = async (req, res) => {
     req.flash("error", "Cannot find that campground");
     res.redirect("/campgrounds");
   }
-  var hasCorrectImages = false;
-  console.log(campground);
+  let hasCorrectImages = false;
+  // console.log(campground);
   campground.images.forEach((image) => {
     if (
       image.url.endsWith(".png") ||
       image.url.endsWith(".jpg") ||
       image.url.endsWith(".jpeg")
     ) {
+      console.log("correct images")
       hasCorrectImages = true;
-    }
+    } 
   });
   res.render("campgrounds/edit", { campground, hasCorrectImages });
 };

@@ -80,7 +80,9 @@
                         <% campground.images.forEach((image, i)=> { %>
                             <div class="col">
                                 <div class="card">
-                                    <% if(hasCorrectImages) { %> 
+                                    <% if(hasCorrectImages && (image.url.endsWith(".png") ||
+                                    image.url.endsWith(".jpg") ||
+                                    image.url.endsWith(".jpeg"))) { %> 
                                         <img class="card-img" src="<%= image.thumbnail %>" alt="">
                                     <div class="card-img-overlay text-end pt-1 pe-2">
                                         <% } else { %> 
@@ -88,7 +90,9 @@
                                             <% } %> 
                                         <label class="visually-hidden" for="image-<%= i %>">Delete Image</label>
                                         <input class="form-check-input"
-                                        checked="<%= !hasCorrectImages %>" type="checkbox" name="deleteImages[]"
+                                        checked="<%= (!(hasCorrectImages && (image.url.endsWith(".png") ||
+                                    image.url.endsWith(".jpg") ||
+                                    image.url.endsWith(".jpeg")))) %>" type="checkbox" name="deleteImages[]"
                                             value="<%= image.filename %>" id="image-<%= i %>">
                                     </div>
                                 </div>
