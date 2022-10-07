@@ -127,19 +127,65 @@ module.exports.sendResetMail = (req, res) => {
             pass: process.env.APP_PASSWORD,
           },
         });
+        const resetLink = `http://${req.headers.host}/reset/${token}`;
+        const resetMessage = `<!DOCTYPE html>
+        <html lang="en">
+        <head>
+            <meta charset="UTF-8">
+            <meta http-equiv="X-UA-Compatible" content="IE=edge">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>You are receiving this because you (or someone else) have requested the reset of the password for your account</title>
+            <style>
+                @import url('https://fonts.googleapis.com/css2?family=League+Spartan:wght@700&display=swap');
+                body{
+                    background-color: aliceblue;
+                    font-family: 'League Spartan', sans-serif;
+                }
+                button{
+                    border-radius: 5px;
+                    background-color: black;
+                    color: white;
+                    padding: 15px;
+                    cursor: pointer;
+                }
+
+                .buttonReset:hover{
+                  background-color: white;
+                  color: black;
+                  font-weight: 700;
+                }
+            </style>
+        </head>
+        <body>
+            <div class="container" style="width:500px ;height:500px; margin-left: 20%;">
+            <p style="text-align:center;">You are receiving this because you (or someone else) have requested the reset of the password for your account.</p>
+            <div>
+                <h1 style="text-align: center;">Forgot your password? Ah, been there.</h1>
+                <p style="text-align: center;">Don't worry we got it covered.</p>
+            </div>
+            <div style=" display: block; margin:0 170px; width: 300px; cursor: pointer;">
+            <a href=${resetLink}><button class="buttonReset">Reset Password</button></a>
+        </div>
+        <p style="text-align: center;"><b>If you did not request this, please ignore this email and your password will remain unchanged.</b></p>
+        <div>
+            <p style="text-align: center;">&copy; YelpCamp | 2022</p>
+        </div>
+        </div>
+        </body>
+        </html>`;
         const mailOptions = {
           to: user.email,
           from: "yelpcamp.alerts@gmail.com",
           subject: "YelpCamp Account Password Reset",
-          text:
-            "You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\n" +
-            "Please click on the following link, or paste this into your browser to complete the process:\n\n" +
-            "http://" +
-            req.headers.host +
-            "/reset/" +
-            token +
-            "\n\n" +
-            "If you did not request this, please ignore this email and your password will remain unchanged.\n",
+          html: resetMessage,
+          // "You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\n" +
+          // "Please click on the following link, or paste this into your browser to complete the process:\n\n" +
+          // "http://" +
+          // req.headers.host +
+          // "/reset/" +
+          // token +
+          // "\n\n" +
+          // "If you did not request this, please ignore this email and your password will remain unchanged.\n",
         };
         mailTransporter.sendMail(mailOptions, function (err) {
           // console.log("mail sent");

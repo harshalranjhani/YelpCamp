@@ -11,7 +11,9 @@
                         <div class="carousel-item <%= i==0? 'active' : ''  %> " data-bs-interval="10000">
                         <% if(image.url.endsWith('.png') || image.url.endsWith('.jpg') || image.url.endsWith('.jpeg')) { %> 
                                 <img src="<%= image.url %> " class="d-block w-100" alt="...">
-                                <% } 
+                                <% } else{ %> 
+                                    <img src="imgs/Image_not_available.png" class="d-block w-100" alt="...">
+                                    <% } %> 
                          %> 
                                 </div>
                         <% }) %>
