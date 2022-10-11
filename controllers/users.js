@@ -252,6 +252,7 @@ module.exports.resetPassword = (req, res) => {
               });
             } else {
               req.flash("error", "Passwords do not match.");
+              console.log("passwords do not match");
               return res.redirect("back");
             }
           }
