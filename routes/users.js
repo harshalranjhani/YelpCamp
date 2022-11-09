@@ -6,6 +6,7 @@ const catchAsync = require("../utils/catchAsync");
 const passport = require("passport");
 const users = require("../controllers/users");
 const { isLoggedIn } = require("../middleware");
+const { forEach } = require("async");
 
 router
   .route("/register")
@@ -28,9 +29,10 @@ router
   .get(users.renderForgotForm)
   .post(users.sendResetMail);
 
-router.route("/reset/:token")
-    .get(users.renderResetForm)
-    .post(users.resetPassword)
+router
+  .route("/reset/:token")
+  .get(users.renderResetForm)
+  .post(users.resetPassword);
 
 router.get("/logout", users.logout);
 
@@ -55,6 +57,16 @@ router.get(
             if (err) {
               console.log(err);
             } else {
+              const allGoodCampgrounds = allCampgrounds.filter((campground) =>
+                campground.images.filter(
+                  (image) =>
+                    image.url.endsWith("png") ||
+                    image.url.endsWith("jpg") ||
+                    image.url.endsWith("jpeg")
+                )
+              );
+              // forEach(())
+              console.log(allGoodCampgrounds);
               res.render("users/dashboard", {
                 campgrounds: allCampgrounds,
                 current: pageNumber,
