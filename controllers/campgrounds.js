@@ -102,13 +102,7 @@ module.exports.showCampground = async (req, res) => {
     res.redirect("/campgrounds");
   }
   const postedOn = moment(campground.postedOn).fromNow();
-  const images = campground.images.filter(
-    (image) =>
-      image.url.endsWith("png") ||
-      image.url.endsWith("jpg") ||
-      image.url.endsWith("jpeg")
-  );
-  res.render("campgrounds/show", { campground, postedOn, images });
+  res.render("campgrounds/show", { campground, postedOn });
 };
 
 module.exports.renderEditForm = async (req, res) => {
@@ -118,7 +112,19 @@ module.exports.renderEditForm = async (req, res) => {
     req.flash("error", "Cannot find that campground");
     res.redirect("/campgrounds");
   }
-  res.render("campgrounds/edit", { campground });
+  let hasCorrectImages = false;
+  // console.log(campground);
+  campground.images.forEach((image) => {
+    if (
+      image.url.endsWith(".png") ||
+      image.url.endsWith(".jpg") ||
+      image.url.endsWith(".jpeg")
+    ) {
+      console.log("correct images")
+      hasCorrectImages = true;
+    } 
+  });
+  res.render("campgrounds/edit", { campground, hasCorrectImages });
 };
 
 module.exports.updateCampground = async (req, res) => {
