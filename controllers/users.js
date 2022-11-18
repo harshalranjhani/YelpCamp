@@ -223,6 +223,11 @@ module.exports.renderResetForm = (req, res) => {
 };
 
 module.exports.resetPassword = (req, res) => {
+  if (req.body.password !== req.body.confirm) {
+    req.flash("error", "Passwords do not match.");
+    console.log("passwords do not match");
+    return res.redirect("back");
+  }
   async.waterfall(
     [
       function (done) {
