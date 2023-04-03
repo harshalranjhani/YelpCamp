@@ -33,6 +33,15 @@
             <% } %>
         
         <h2>Email : <%= user.email %></h2>
+       <% if(!user.isEmailVerified) { %>
+        <a href="/verify" style="background: none; border: none;" type="button">
+            <span class="d-inline badge rounded-pill bg-success">Verify Email</span>
+          </a>
+        <% } else {%>
+            <button style="background: none; border: none;" type="button">
+                <span class="d-inline badge rounded-pill bg-success">Verified</span>
+              </button>
+            <% } %>
         <h3>username: <%= user.username %> </h3>
               <% if(campgrounds.length) {%> 
             <% for(let campground of campgrounds) { %>

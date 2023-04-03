@@ -3,6 +3,8 @@ const passport = require("passport");
 const nodemailer = require("nodemailer");
 const async = require("async");
 const crypto = require("crypto");
+const sendMail = require("../utils/sendHTMLMail");
+const Token = require("../models/token");
 
 let mailTransporter = nodemailer.createTransport({
   service: "gmail",
@@ -12,47 +14,53 @@ let mailTransporter = nodemailer.createTransport({
   },
 });
 
-const message = `<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=League+Spartan:wght@700&display=swap');
-        body{
-            background-color: aliceblue;
-            font-family: 'League Spartan', sans-serif;
-        }
-        button{
-            border-radius: 5px;
-            background-color: black;
-            color: white;
-            padding: 15px;
-        }
-    </style>
-</head>
-<body>
-    <div class="container" style="width:500px ;height:500px;">
-    <div style="display: block; margin:0 200px;">
-        <img style="height: 2rem;" src="https://freepngimg.com/save/26767-welcome-picture/749x217" alt="YELPCAMP">
-    </div>
-    <div>
-        <h1 style="text-align: center;">Welcome to YelpCamp, Hiker!</h1>
-        <p style="text-align: center;">We are delighted to have you here.</p>
-    </div>
-    <div style=" display: block; margin:0 170px; width: 300px; cursor: pointer;">
-    <a href="https://experience-yelpcamp.herokuapp.com/campgrounds/new"><button  style="cursor:pointer;">Add New Campground</button></a>
-</div>
-<div>
-    <p style="text-align: center;">&copy; YelpCamp | 2022</p>
-</div>
-</div>
-</body>
-</html>`;
+module.exports = function generateMessage(url) {
+  return `<!DOCTYPE html>
+  <html lang="en">
+  <head>
+      <meta charset="UTF-8">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Document</title>
+      <style>
+          @import url('https://fonts.googleapis.com/css2?family=League+Spartan:wght@700&display=swap');
+          body{
+              background-color: aliceblue;
+              font-family: 'League Spartan', sans-serif;
+          }
+          button{
+              border-radius: 5px;
+              background-color: black;
+              color: white;
+              padding: 15px;
+          }
+      </style>
+  </head>
+  <body>
+      <div class="container" style="width:500px ;height:500px;">
+      <div style="display: block; margin:0 200px;">
+          <img style="height: 2rem;" src="https://freepngimg.com/save/26767-welcome-picture/749x217" alt="YELPCAMP">
+      </div>
+      <div>
+          <h1 style="text-align: center;">Welcome to YelpCamp, Hiker! Let's get you verified.</h1>
+          <p style="text-align: center;">We are delighted to have you here.</p>
+      </div>
+      <div style=" display: block; margin:0 170px; width: 300px; cursor: pointer;">
+      <a href=${url}><button  style="cursor:pointer;">Verify Email</button></a>
+  </div>
+  <div>
+      <p style="text-align: center;">&copy; YelpCamp | 2022</p>
+  </div>
+  </div>
+  </body>
+  </html>`;
+}
 
 module.exports.renderRegisterForm = (req, res) => {
+  if (req.user) {
+    req.logout();
+    return res.redirect("/register");
+  }
   res.render("users/register");
 };
 
@@ -61,33 +69,57 @@ module.exports.registerUser = async (req, res, next) => {
     const { email, username, password, firstName, lastName } = req.body;
     const user = new User({ email, username, firstName, lastName });
     const registeredUser = await User.register(user, password);
-
-    let mailDetails = {
-      from: "yelpcamp.alerts@gmail.com",
-      to: email,
-      subject: "Welcome to YelpCamp!",
-      html: message,
-    };
-
-    mailTransporter.sendMail(mailDetails, function (err, data) {
-      if (err) {
-        console.log("Error Occurs", err);
-      } else {
-        console.log("Email sent successfully");
-      }
-    });
+    const token = await new Token({
+      userId: user._id,
+      token: crypto.randomBytes(32).toString("hex"),
+    }).save();
+    const url = `${process.env.BASE_URL}/users/${user._id}/verify/${token.token}`;
+    const message = generateMessage(url);
+    await sendMail(email, "Welcome to YelpCamp!", message);
     req.login(registeredUser, (err) => {
       if (err) return next(err);
-      req.flash("success", "Welcome to Yelp Camp!");
+      req.flash(
+        "success",
+        "Welcome to Yelp Camp! Check your inbox to verify your email :)"
+      );
       res.redirect("/campgrounds");
     });
   } catch (e) {
     req.flash("error", e.message);
-    res.redirect("register");
+    res.redirect("/register");
+  }
+};
+
+module.exports.verifyUser = async (req, res) => {
+  try {
+    const user = await User.findOne({ _id: req.params.id });
+    if (!user) {
+      return res.status(400).json({ message: "Invalid Link" });
+    }
+
+    const token = await Token.findOne({
+      userId: user._id,
+      token: req.params.token,
+    });
+
+    if (!token) {
+      return res.status(400).json({ message: "Invalid link" });
+    }
+
+    await user.updateOne({ isEmailVerified: true });
+    await Token.deleteOne({ token: req.params.token })
+      .then((res) => console.log(res))
+      .catch((e) => console.log(e.message));
+    return res.status(200).json({ message: "Email verified successfully." });
+  } catch (e) {
+    return res.status(400).json({ message: e.message });
   }
 };
 
 module.exports.renderLoginForm = (req, res) => {
+  if (req.user) {
+    return res.redirect("/campgrounds");
+  }
   res.render("users/login");
 };
 

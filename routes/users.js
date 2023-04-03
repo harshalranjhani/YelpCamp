@@ -6,6 +6,7 @@ const catchAsync = require("../utils/catchAsync");
 const passport = require("passport");
 const users = require("../controllers/users");
 const { isLoggedIn } = require("../middleware");
+const verifyEmail = require("../utils/verifyEmail");
 
 router
   .route("/register")
@@ -28,11 +29,27 @@ router
   .get(users.renderForgotForm)
   .post(users.sendResetMail);
 
-router.route("/reset/:token")
-    .get(users.renderResetForm)
-    .post(users.resetPassword)
+router
+  .route("/reset/:token")
+  .get(users.renderResetForm)
+  .post(users.resetPassword);
+
+router.route("/users/:id/verify/:token").get(users.verifyUser);
 
 router.get("/logout", users.logout);
+router.get("/verify", async (req, res) => {
+  const response = await verifyEmail(req.user.email);
+  if (response === 404) {
+    req.flash("error", "No user with that email was found.");
+    return res.redirect("back");
+  } else if (response === 200) {
+    req.flash("success", "Check your inbox to verify email :)");
+    return res.redirect("back");
+  } else {
+    req.flash("error", response);
+    return res.redirect("back");
+  }
+});
 
 router.get(
   "/dashboard/:id",
