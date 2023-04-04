@@ -14,7 +14,7 @@ let mailTransporter = nodemailer.createTransport({
   },
 });
 
-module.exports = function generateMessage(url) {
+function generateMessage(url) {
   return `<!DOCTYPE html>
   <html lang="en">
   <head>
@@ -55,6 +55,8 @@ module.exports = function generateMessage(url) {
   </body>
   </html>`;
 }
+
+module.exports = generateMessage;
 
 module.exports.renderRegisterForm = (req, res) => {
   if (req.user) {
