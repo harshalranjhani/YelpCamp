@@ -73,6 +73,7 @@ router.get(
               console.log(err);
             } else {
               res.render("users/dashboard", {
+                currentUser: req.currentUser,
                 campgrounds: allCampgrounds,
                 current: pageNumber,
                 pages: Math.ceil(count / perPage),
