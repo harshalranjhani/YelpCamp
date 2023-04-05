@@ -33,17 +33,17 @@
             <% } %>
         
         <h2>Email : <%= user.email %></h2>
-       <% if(!user.isEmailVerified && user._id === currentUser._id) { %>
+       <% if(!user.isEmailVerified && user._id.toString() === id) { %>
         <a href="/verify" style="background: none; border: none;" type="button">
             <span class="d-inline badge rounded-pill bg-success">Verify Email</span>
           </a>
-        <% } else if(user.isEmailVerified) {%>
-            <button style="background: none; border: none;" type="button">
-                <span class="d-inline badge rounded-pill bg-success">Verified</span>
-              </button>
-            <% } else {%>
+            <%  } else {%>
               <button style="background: none; border: none;" type="button">
-                <span class="d-inline badge rounded-pill bg-danger">Email not verified</span>
+                  <% if(user.isEmailVerified) { %>
+                    <span class="d-inline badge rounded-pill bg-success">Email Verified</span>
+                    <% } else{ %>
+                      <span class="d-inline badge rounded-pill bg-danger">Email not verified</span>
+                      <% } %>
               </button>
               <% } %>
         <h3>username: <%= user.username %> </h3>

@@ -46,7 +46,7 @@ router.get("/verify", async (req, res) => {
     req.flash("success", "Check your inbox to verify email :)");
     return res.redirect("back");
   } else {
-    req.flash("error", response);
+    req.flash("error", "Token already generated, please check your email for the link or contact the owner of this website.");
     return res.redirect("back");
   }
 });
@@ -73,7 +73,7 @@ router.get(
               console.log(err);
             } else {
               res.render("users/dashboard", {
-                currentUser: req.user,
+                id: req.user._id.toString(),
                 campgrounds: allCampgrounds,
                 current: pageNumber,
                 pages: Math.ceil(count / perPage),
