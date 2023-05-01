@@ -9,7 +9,7 @@ const Token = require("../models/token");
 let mailTransporter = nodemailer.createTransport({
   service: "gmail",
   auth: {
-    user: "yelpcamp.alerts@gmail.com",
+    user: "alerts.harshalranjhani@gmail.com",
     pass: process.env.APP_PASSWORD,
   },
 });
@@ -157,7 +157,7 @@ module.exports.sendResetMail = (req, res) => {
         let mailTransporter = nodemailer.createTransport({
           service: "gmail",
           auth: {
-            user: "yelpcamp.alerts@gmail.com",
+            user: "alerts.harshalranjhani@gmail.com",
             pass: process.env.APP_PASSWORD,
           },
         });
@@ -209,7 +209,7 @@ module.exports.sendResetMail = (req, res) => {
         </html>`;
         const mailOptions = {
           to: user.email,
-          from: "yelpcamp.alerts@gmail.com",
+          from: "alerts.harshalranjhani@gmail.com",
           subject: "YelpCamp Account Password Reset",
           html: resetMessage,
           // "You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\n" +
@@ -301,13 +301,13 @@ module.exports.resetPassword = (req, res) => {
         let mailTransporter = nodemailer.createTransport({
           service: "gmail",
           auth: {
-            user: "yelpcamp.alerts@gmail.com",
+            user: "yalerts.harshalranjhani@gmail.com",
             pass: process.env.APP_PASSWORD,
           },
         });
         const mailOptions = {
           to: user.email,
-          from: "yelpcamp.alerts@gmail.com",
+          from: "alerts.harshalranjhani@gmail.com",
           subject: "Your password has been changed",
           text:
             "Hello,\n\n" +
