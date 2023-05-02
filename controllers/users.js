@@ -153,7 +153,7 @@ module.exports.sendResetMail = (req, res) => {
           });
         });
       },
-      function (token, user, done) {
+      function (token, user, done, next) {
         let mailTransporter = nodemailer.createTransport({
           service: "gmail",
           auth: {
