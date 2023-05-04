@@ -96,7 +96,9 @@ module.exports.verifyUser = async (req, res) => {
   try {
     const user = await User.findOne({ _id: req.params.id });
     if (!user) {
-      return res.status(400).json({ message: "Invalid Link" });
+      req.flash("error", "Invalid Link!");
+      return res.redirect("/campgrounds");
+      // return res.status(400).json({ message: "Invalid Link" });
     }
 
     const token = await Token.findOne({
@@ -105,14 +107,18 @@ module.exports.verifyUser = async (req, res) => {
     });
 
     if (!token) {
-      return res.status(400).json({ message: "Invalid link" });
+      req.flash("error", "Invalid Link!");
+      return res.redirect("/campgrounds");
+      // return res.status(400).json({ message: "Invalid link" });
     }
 
     await user.updateOne({ isEmailVerified: true });
     await Token.deleteOne({ token: req.params.token })
       .then((res) => console.log(res))
       .catch((e) => console.log(e.message));
-    return res.status(200).json({ message: "Email verified successfully." });
+    req.flash("success", "Email verified successfully!");
+    return res.redirect("/campgrounds");
+    // return res.status(200).json({ message: "Email verified successfully." });
   } catch (e) {
     return res.status(400).json({ message: e.message });
   }
