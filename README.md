@@ -7,6 +7,7 @@ Features -
   - Dashboard
   - Create Reviews and posts
   - Edit and Add Campgrounds
+  - Email Verification
 
 
 If you wish to run this app on your local computer, make sure to download all the dependencies available in the package.json file.\
