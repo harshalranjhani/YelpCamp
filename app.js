@@ -17,6 +17,7 @@ const User = require("./models/user");
 const mongoSanitize = require("express-mongo-sanitize");
 const helmet = require("helmet");
 const MongoStore = require("connect-mongo");
+const mongodb = require("mongodb");
 const dbUrl = process.env.DB_URL || "mongodb://localhost:27017/yelp-camp";
 // const dbUrl = "mongodb://localhost:27017/yelp-camp";
 const campgroundRoutes = require("./routes/campgrounds");
@@ -165,6 +166,34 @@ app.use((err, req, res, next) => {
   if (!err.message) err.message = "Something went Wrong!";
   res.status(statusCode).render("error", { err, statusCode });
 });
+
+async function updateData() {
+  const uri = dbUrl; // Your MongoDB connection URI
+  const client = new mongodb.MongoClient(uri);
+
+  try {
+    await client.connect();
+
+    const db = client.db("myFirstDatabase");
+    const usersCollection = db.collection("users");
+
+    // Update user documents
+    await usersCollection.updateMany(
+      {},
+      {
+        $set: { firstReviewCount: 0 },
+      }
+    );
+
+    console.log("Data update completed successfully.");
+  } catch (error) {
+    console.error("Error updating data:", error);
+  } finally {
+    client.close();
+  }
+}
+
+// updateData();
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {

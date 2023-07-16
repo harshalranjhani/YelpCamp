@@ -25,6 +25,10 @@ const UserSchema = new Schema({
     type: String,
     required: true,
   },
+  firstReviewCount: {
+    type: Number,
+    default: 0,
+  },
   resetPasswordToken: String,
   resetPasswordExpires: Date,
 });
