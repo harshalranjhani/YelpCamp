@@ -9,7 +9,7 @@ module.exports.createReview = async (req, res) => {
   console.log(campground.reviews.length);
   const review = new Review(req.body.review);
   console.log(req.user);
-  if (campground.reviews.length === 0) {
+  if (campground.reviews.length === 1 || campground.reviews.length === 0) {
     campground.firstReviewer = req.user._id;
     req.user.firstReviewCount = req.user.firstReviewCount + 1;
     await User.updateOne(
