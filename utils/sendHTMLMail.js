@@ -8,14 +8,14 @@ async function sendEmail(email, subject, message) {
       port: process.env.EMAIL_PORT,
       secure: process.env.SECURE, // use SSL
       auth: {
-        user: process.env.USER,
+        user: "ranjhaniharshal@icloud.com",
         pass: process.env.PASS,
       },
     };
     const transporter = nodemailer.createTransport(smtpConfig);
 
     await transporter.sendMail({
-      from: process.env.USER,
+      from: process.env.FROM,
       to: email,
       subject: subject,
       html: message,

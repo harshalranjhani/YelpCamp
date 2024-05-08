@@ -7,9 +7,9 @@ const sendMail = require("../utils/sendHTMLMail");
 const Token = require("../models/token");
 
 let mailTransporter = nodemailer.createTransport({
-  service: "gmail",
+  service: process.env.SERVICE,
   auth: {
-    user: "alerts.harshalranjhani@gmail.com",
+    user: "ranjhaniharshal@icloud.com",
     pass: process.env.APP_PASSWORD,
   },
 });
@@ -161,9 +161,9 @@ module.exports.sendResetMail = (req, res) => {
       },
       function (token, user, done, next) {
         let mailTransporter = nodemailer.createTransport({
-          service: "gmail",
+          service: process.env.SERVICE,
           auth: {
-            user: "alerts.harshalranjhani@gmail.com",
+            user: "ranjhaniharshal@icloud.com",
             pass: process.env.APP_PASSWORD,
           },
         });
@@ -215,7 +215,7 @@ module.exports.sendResetMail = (req, res) => {
         </html>`;
         const mailOptions = {
           to: user.email,
-          from: "alerts.harshalranjhani@gmail.com",
+          from: process.env.FROM,
           subject: "YelpCamp Account Password Reset",
           html: resetMessage,
           // "You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\n" +
@@ -240,8 +240,8 @@ module.exports.sendResetMail = (req, res) => {
       },
     ],
     function (err) {
-      if (err) return next(err);
-      res.redirect("/forgot-password");
+      console.log(err.message)
+      return res.redirect("/forgot-password");
     }
   );
 };
@@ -305,15 +305,15 @@ module.exports.resetPassword = (req, res) => {
       },
       function (user, done) {
         let mailTransporter = nodemailer.createTransport({
-          service: "gmail",
+          service: process.env.SERVICE,
           auth: {
-            user: "yalerts.harshalranjhani@gmail.com",
+            user: "ranjhaniharshal@icloud.com",
             pass: process.env.APP_PASSWORD,
           },
         });
         const mailOptions = {
           to: user.email,
-          from: "alerts.harshalranjhani@gmail.com",
+          from: process.env.FROM,
           subject: "Your password has been changed",
           text:
             "Hello,\n\n" +
