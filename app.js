@@ -92,7 +92,7 @@ app.use(mongoSanitize());
 // app.use(helmet({ contentSecurityPolicy: false }));
 
 const scriptSrcUrls = [
-  "https://stackpath.bootstrapcdn.com/",
+  // "https://stackpath.bootstrapcdn.com/",
   "https://api.tiles.mapbox.com/",
   "https://api.mapbox.com/",
   "https://kit.fontawesome.com/",
